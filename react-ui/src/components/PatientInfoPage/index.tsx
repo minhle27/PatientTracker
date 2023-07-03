@@ -19,7 +19,7 @@ const Gender = ({ gender }: { gender: string }) => {
 	}
 };
 
-const Entries = ({ entries }: { entries: Array<Entry> }) => {
+const Entries = ({ entries, diagnosisData }: { entries: Array<Entry>, diagnosisData: Map<string, string> }) => {
 	return (
 		<div>
 			{entries && entries.length > 0 ? (
@@ -32,7 +32,9 @@ const Entries = ({ entries }: { entries: Array<Entry> }) => {
 								{entry.diagnosisCodes ? (
 									<ul>
 										{entry.diagnosisCodes.map(code => 
-											<li key={code}>{code}</li>	
+											<li key={code}>
+												<p>{code} {diagnosisData.get(code)}</p>
+											</li>	
 										)}
 									</ul>
 								) : (
@@ -49,7 +51,7 @@ const Entries = ({ entries }: { entries: Array<Entry> }) => {
 	)
 }
 
-const PatientInfoPage = () => {
+const PatientInfoPage = ({ diagnosisData }: { diagnosisData: Map<string, string> }) => {
 	const [patientDisplay, setPatientDisplay] = useState<Patient>();
 	const id = useParams().id;
 
@@ -60,7 +62,7 @@ const PatientInfoPage = () => {
 			setPatientDisplay(patient);
 		};
     void fetchPatientById();
-  }, [id]);
+  	}, [id]);
 
 
 
@@ -77,7 +79,7 @@ const PatientInfoPage = () => {
 						<p>occupation: {patientDisplay.occupation}</p>
 					</section>
 					<section>
-						<Entries entries={patientDisplay.entries as Array<Entry>} />
+						<Entries entries={patientDisplay.entries as Array<Entry>} diagnosisData={diagnosisData} />
 					</section>
 				</div>
 			) : (
