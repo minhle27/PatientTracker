@@ -1,4 +1,4 @@
-import { Patient } from "../../types";
+import { Patient, Gender } from "../../types";
 import { useState, useEffect } from "react";
 import { useParams } from 'react-router-dom'
 import { Diagnosis } from "../../types";
@@ -6,18 +6,8 @@ import FemaleIcon from '@mui/icons-material/Female';
 import MaleIcon from '@mui/icons-material/Male';
 import patientService from "../../services/patients";
 import TransgenderIcon from '@mui/icons-material/Transgender';
-import EntryInfo from "./EntryInfo";
+import EntryInfo from "./EntryInfo/EntryInfo";
 
-const Gender = ({ gender }: { gender: string }) => {
-	switch(gender){
-		case 'male':
-			return <MaleIcon />
-		case 'female':
-			return <FemaleIcon />
-		default:
-			return <TransgenderIcon />
-	}
-};
 
 // const Entries = ({ entries, diagnosisData }: { entries: Array<Entry>, diagnosisData: Map<string, string> }) => {
 // 	return (
@@ -54,6 +44,16 @@ const Gender = ({ gender }: { gender: string }) => {
 const PatientInfoPage = ({ diagnoses }: { diagnoses: Diagnosis[] }) => {
 	const [patientDisplay, setPatientDisplay] = useState<Patient|null>(null);
 
+	const getGenderIcon = (gender: Gender) => {
+		switch(gender) {
+			case Gender.Male:
+				return <MaleIcon />
+			case Gender.Female:
+				return <FemaleIcon />
+			default:
+				return <TransgenderIcon />
+		}
+	};
 
 	const id = useParams().id;
 
@@ -78,8 +78,7 @@ const PatientInfoPage = ({ diagnoses }: { diagnoses: Diagnosis[] }) => {
 		<div>
 			<section>
 				<h2>
-					{patientDisplay.name}
-					<Gender gender={patientDisplay.gender} />
+					{patientDisplay.name} {getGenderIcon(patientDisplay.gender)}
 				</h2>
 				<p>ssn: {patientDisplay.ssn}</p>
 				<p>occupation: {patientDisplay.occupation}</p>
@@ -89,6 +88,7 @@ const PatientInfoPage = ({ diagnoses }: { diagnoses: Diagnosis[] }) => {
 				{patientDisplay.entries?.map(each => 
 					<EntryInfo key={each.id} entry={each} diagnoses={diagnoses}/>
 				)}
+				{patientDisplay.entries?.length === 0 ? <p>Entry not found for this patient</p> : null}
 			</section>
 		</div>
 	);
