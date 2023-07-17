@@ -1,0 +1,16 @@
+.patient-info {
+    display: flex;
+    flex-direction: column;
+    border-style: dashed;
+    padding-left: 10px;
+    padding-bottom: 5px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    max-width: 279px;
+    border-radius: 14px;
+}
+
+.item {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}

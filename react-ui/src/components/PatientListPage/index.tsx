@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Box, Table, Button, TableHead, Typography, TableCell, TableRow, TableBody } from '@mui/material';
 import axios from 'axios';
+import SearchBar from "../SearchBar/SearchBar";
 
 import {
   Link
@@ -19,7 +20,7 @@ interface Props {
 }
 
 const PatientListPage = ({ patients, setPatients } : Props ) => {
-
+  const [filter, setFilter] = useState('');
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [error, setError] = useState<string>();
 
@@ -51,8 +52,12 @@ const PatientListPage = ({ patients, setPatients } : Props ) => {
     }
   };
 
+  const byFilterField = (p: Patient) => p.name.toLowerCase().includes(filter.toLowerCase());
+  const patientsToShow = filter ? patients.filter(byFilterField) : patients;
+
   return (
     <div className="App">
+      <SearchBar filter={filter} setFilter={setFilter} />
       <Box>
         <Typography align="center" variant="h6">
           Patient list
@@ -68,7 +73,7 @@ const PatientListPage = ({ patients, setPatients } : Props ) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {Object.values(patients).map((patient: Patient) => (
+          {Object.values(patientsToShow).map((patient: Patient) => (
             <TableRow key={patient.id}>
               <TableCell>
                 <Link to={`/patients/${patient.id}`}>{patient.name}</Link>
