@@ -18,10 +18,14 @@ const App = () => {
     pingBackend();
 
     const fetchInitialData = async () => {
-      const patients = await patientService.getAll();
-      const diagnoses = await diagnosisService.getAll();
-      setPatients(patients);
-      setDiagnoses(diagnoses);
+      try {
+        const patients = await patientService.getAll();
+        const diagnoses = await diagnosisService.getAll();
+        setPatients(patients);
+        setDiagnoses(diagnoses);
+      } catch (e) {
+        console.log(e);
+      }
     };
     
     void fetchInitialData();
@@ -33,7 +37,7 @@ const App = () => {
         <Typography variant="h3" style={{ marginBottom: "0.5em" }}>
           Patientor
         </Typography>
-        <Button component={Link} to="/" variant="contained" color="primary">
+        <Button component={Link} to="/" variant="contained" color="info">
           Home
         </Button>
         <Divider hidden />
