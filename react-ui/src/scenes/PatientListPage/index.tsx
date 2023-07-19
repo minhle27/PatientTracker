@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Box, Table, Button, TableHead, Typography, TableCell, TableRow, TableBody } from '@mui/material';
 import axios from 'axios';
-import SearchBar from "../SearchBar/SearchBar";
+import SearchBar from "../../components/SearchBar/SearchBar";
 
 import {
   Link
@@ -10,7 +10,7 @@ import {
 import { PatientFormValues, Patient } from "../../types";
 import AddPatientModal from "../AddPatientModal";
 
-import HealthRatingBar from "../HealthRatingBar";
+import HealthRatingBar from "../../components/HealthRatingBar";
 
 import patientService from "../../services/patients";
 import { useStateValue } from "../../state";
@@ -18,7 +18,6 @@ import { addPatient } from "../../state";
 
 const PatientListPage = () => {
   const [{ patients }, dispatch] = useStateValue();
-  
   const [filter, setFilter] = useState('');
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [error, setError] = useState<string>();

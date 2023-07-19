@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, forwardRef, useImperativeHandle } from "react";
 import { ErrorMessage, Field, FieldProps, FormikProps } from "formik";
 import {
   Select,
@@ -6,12 +6,11 @@ import {
   MenuItem,
   TextField as TextFieldMUI,
   Typography,
-} from '@mui/material';
+} from "@mui/material";
 import { Diagnosis, Gender } from "../../types";
-import { InputLabel } from '@mui/material';
-import Input from '@mui/material/Input';
+import { InputLabel } from "@mui/material";
+import Input from "@mui/material/Input";
 
-// structure of a single option
 export type GenderOption = {
   value: Gender;
   label: string;
@@ -24,7 +23,12 @@ type SelectFieldProps = {
   options: GenderOption[];
 };
 
-const FormikSelect = ({ field, ...props }: FieldProps) => <Select {...field} {...props} />;
+export const FormikSelect = ({ field, ...props }: FieldProps) => (
+  <Select {...field} {...props} />
+);
+export const FormikInputDate = ({ field, ...props }: FieldProps) => (
+  <Input type="date" fullWidth {...field} {...props} />
+);
 
 export const SelectField = ({ name, label, options }: SelectFieldProps) => (
   <>
@@ -88,7 +92,7 @@ export const NumberField = ({ field, label, min, max }: NumberProps) => {
           if (value > max) setValue(max);
           else if (value <= min) setValue(min);
           else setValue(Math.floor(value));
-      }}
+        }}
       />
       <Typography variant="subtitle2" style={{ color: "red" }}>
         <ErrorMessage name={field.name} />
@@ -97,40 +101,68 @@ export const NumberField = ({ field, label, min, max }: NumberProps) => {
   );
 };
 
-export const DiagnosisSelection = ({
-  diagnoses,
-  setFieldValue,
-  setFieldTouched,
-}: {
+export type ResetRef = {
+  reset: () => void;
+};
+
+type DSProps = {
   diagnoses: Diagnosis[];
   setFieldValue: FormikProps<{ diagnosisCodes: string[] }>["setFieldValue"];
-  setFieldTouched: FormikProps<{ diagnosisCodes: string[] }>["setFieldTouched"];
-}) => {
-  const [selectedDiagnoses, setDiagnoses] = useState<string[]>([]);
-  const field = "diagnosisCodes";
-  const onChange = (data: string[]) => {    
-    setDiagnoses([...data]);
-    setFieldTouched(field, true);
-    setFieldValue(field, selectedDiagnoses);
-  };
-
-  const stateOptions = diagnoses.map((diagnosis) => ({
-    key: diagnosis.code,
-    text: `${diagnosis.name} (${diagnosis.code})`,
-    value: diagnosis.code,
-  }));
-
-  return (
-    <FormControl style={{ width: 552, marginBottom: '30px' }}>
-      <InputLabel>Diagnoses</InputLabel>
-      <Select multiple value={selectedDiagnoses} onChange={(e) => onChange(e.target.value as string[])} input={<Input />}>
-        {stateOptions.map((option) => (
-          <MenuItem key={option.key} value={option.value}>
-            {option.text}
-          </MenuItem>
-        ))}
-      </Select>
-      <ErrorMessage name={field} />
-    </FormControl>
-  );
+  setFieldTouched: FormikProps<{
+    diagnosisCodes: string[];
+  }>["setFieldTouched"];
 };
+
+export const DiagnosisSelection = forwardRef<ResetRef, DSProps>(
+  (
+    {
+      diagnoses,
+      setFieldValue,
+      setFieldTouched,
+    }: DSProps,
+    refs
+  ) => {
+    const [selectedDiagnoses, setDiagnoses] = useState<string[]>([]);
+    const field = "diagnosisCodes";
+    const onChange = (data: string[]) => {
+      setDiagnoses([...data]);
+      setFieldTouched(field, true);
+      const updatedSelectedDiagnoses = [...data];
+      setFieldValue(field, updatedSelectedDiagnoses);
+    };
+
+    const stateOptions = diagnoses.map((diagnosis) => ({
+      key: diagnosis.code,
+      text: `${diagnosis.name} (${diagnosis.code})`,
+      value: diagnosis.code,
+    }));
+
+    const reset = () => {
+      setDiagnoses([]);
+    };
+
+    useImperativeHandle(refs, () => {
+      return {
+        reset,
+      };
+    });
+
+    return (
+      <FormControl fullWidth>
+        <Select
+          multiple
+          value={selectedDiagnoses}
+          onChange={(e) => onChange(e.target.value as string[])}
+          input={<Input />}
+        >
+          {stateOptions.map((option) => (
+            <MenuItem key={option.key} value={option.value}>
+              {option.text}
+            </MenuItem>
+          ))}
+        </Select>
+        <ErrorMessage name={field} />
+      </FormControl>
+    );
+  }
+);

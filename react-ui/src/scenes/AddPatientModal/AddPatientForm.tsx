@@ -9,13 +9,11 @@ interface Props {
   onSubmit: (values: PatientFormValues) => void;
 }
 
-
 const genderOptions: GenderOption[] = Object.values(Gender).map(v => ({
   value: v, label: v.toString()
 }));
 
-
-export const AddPatientForm = ({ onSubmit, onCancel }: Props) => {
+const AddPatientForm = ({ onSubmit, onCancel }: Props) => {
   return (
     <Formik
       initialValues={{
