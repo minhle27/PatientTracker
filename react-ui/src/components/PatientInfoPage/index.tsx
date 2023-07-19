@@ -30,7 +30,7 @@ const PatientInfoPage = ({ diagnoses }: { diagnoses: Diagnosis[] }) => {
 	useEffect(() => {
     	const fetchPatientById = async () => {
 			if (id){
-				const patient =  await patientService.getAPatient(id as string);
+				const patient =  await patientService.getAPatient(id);
 				setPatientDisplay(patient);
 			}
 		};

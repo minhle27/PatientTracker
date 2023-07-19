@@ -13,13 +13,12 @@ import AddPatientModal from "../AddPatientModal";
 import HealthRatingBar from "../HealthRatingBar";
 
 import patientService from "../../services/patients";
+import { useStateValue } from "../../state";
+import { addPatient } from "../../state";
 
-interface Props {
-  patients : Patient[]
-  setPatients: React.Dispatch<React.SetStateAction<Patient[]>>
-}
-
-const PatientListPage = ({ patients, setPatients } : Props ) => {
+const PatientListPage = () => {
+  const [{ patients }, dispatch] = useStateValue();
+  
   const [filter, setFilter] = useState('');
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [error, setError] = useState<string>();
@@ -33,8 +32,8 @@ const PatientListPage = ({ patients, setPatients } : Props ) => {
 
   const submitNewPatient = async (values: PatientFormValues) => {
     try {
-      const patient = await patientService.create(values);
-      setPatients(patients.concat(patient));
+      const newPatient = await patientService.create(values);
+      dispatch(addPatient(newPatient));
       setModalOpen(false);
     } catch (e: unknown) {
       if (axios.isAxiosError(e)) {
