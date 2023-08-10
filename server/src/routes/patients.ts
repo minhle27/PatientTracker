@@ -1,6 +1,6 @@
 import express from 'express';
 import patientService from '../services/patientService';
-import { processNewPatient, processNewEntry } from '../utils';
+import { processNewPatient, processNewEntry } from '../utils/fieldValidate';
 const router = express.Router();
 
 router.get('/', (_req, res) => {

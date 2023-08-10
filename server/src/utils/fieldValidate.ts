@@ -1,4 +1,4 @@
-import { NewPatient, Gender, EntryWithoutId, Diagnosis } from "./types";
+import { NewPatient, Gender, EntryWithoutId, Diagnosis } from "../types";
 
 // Validate req body fields when adding new patient
 export const processNewPatient = (object: unknown): NewPatient => {
