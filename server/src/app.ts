@@ -6,6 +6,7 @@ const app = express();
 app.use(express.json());
 import diagnosesRouter from "./routes/diagnoses";
 import patientsRouter from "./routes/patients";
+import doctorsRouter from "./routes/doctors";
 
 mongoose.set("strictQuery", false);
 
@@ -29,5 +30,6 @@ app.get("/api/ping", (_req, res) => {
 
 app.use("/api/diagnoses", diagnosesRouter);
 app.use("/api/patients", patientsRouter);
+app.use("/api/doctors", doctorsRouter);
 
 export default app;

@@ -37,4 +37,5 @@ const entrySchema = new mongoose.Schema({
     }
 });
 
-export default mongoose.model('Entry', entrySchema);
+const entryModel = mongoose.model('Entry', entrySchema);
+export default entryModel;

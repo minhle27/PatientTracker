@@ -62,8 +62,17 @@ export enum Gender {
     Other = 'other',
 }
 
+export interface Doctor {
+    id: string;
+    username: string;
+    password: string;
+    name: string,
+    patients: Array<Patient>;
+}
+
 type UnionOmit<T, K extends string | number | symbol> = T extends unknown ? Omit<T, K> : never;
 export type EntryWithoutId = UnionOmit<Entry, 'id'>;
 
 export type NewPatient = Omit<Patient, 'id'>;
+export type NewDoctor = Omit<Doctor, 'id'>;
 export type NonSensitivePatient = Omit<Patient, 'ssn' | 'entries'>;

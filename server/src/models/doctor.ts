@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import uniqueValidator from "mongoose-unique-validator";
+import { InferSchemaType } from "mongoose";
 
 const doctorSchema = new mongoose.Schema({
   username: {
@@ -9,10 +10,14 @@ const doctorSchema = new mongoose.Schema({
     maxlength: [20, "Must be less than 20 characters"],
     unique: true,
   },
-  passwordHash: {
+  password: {
     type: String,
     required: [true, "Required"],
     minlength: [8, "Must be 8 characters at least"],
+  },
+  name: {
+    type: String, 
+    required: true
   },
   patients: [
     {
@@ -22,10 +27,11 @@ const doctorSchema = new mongoose.Schema({
   ],
 });
 
-const Doctor = mongoose.model("Doctor", doctorSchema);
+type doctorSchemaInferType = InferSchemaType<typeof doctorSchema>;
+const doctorModel = mongoose.model<doctorSchemaInferType>("Doctor", doctorSchema);
 
 doctorSchema.plugin(uniqueValidator, {
   message: "Error, expected {PATH} to be unique",
 });
 
-export default Doctor;
+export default doctorModel;

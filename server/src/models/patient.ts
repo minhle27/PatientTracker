@@ -10,7 +10,7 @@ const patientSchema = new mongoose.Schema({
     maxlength: [20, "Must be less than 20 characters"],
     unique: true,
   },
-  passwordHash: {
+  password: {
     type: String,
     required: [true, "Required"],
     minlength: [8, "Must be 8 characters at least"],
@@ -47,4 +47,6 @@ patientSchema.plugin(uniqueValidator, {
   message: "Error, expected {PATH} to be unique",
 });
 
-export default mongoose.model("Patient", patientSchema);
+const patientModel = mongoose.model("Patient", patientSchema);
+
+export default patientModel;
