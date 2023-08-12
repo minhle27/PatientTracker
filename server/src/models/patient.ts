@@ -15,6 +15,9 @@ const patientSchema = new mongoose.Schema({
     required: [true, "Required"],
     minlength: [8, "Must be 8 characters at least"],
   },
+  doctorId: {
+    type: String,
+  },
   name: {
     type: String,
     required: [true, "Required"],

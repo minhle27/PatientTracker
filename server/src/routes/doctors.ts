@@ -6,9 +6,10 @@ import doctorService from '../services/doctorService';
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 router.post('/', async (request, response): Promise<void> => {
   const newDoctor = request.body as NewDoctor;
-  console.log(newDoctor);
   const addedDoctor = await doctorService.addDoctor(newDoctor);
   response.status(201).json(addedDoctor);
 });
+
+
 
 export default router;
