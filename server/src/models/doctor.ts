@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import uniqueValidator from "mongoose-unique-validator";
 import { InferSchemaType } from "mongoose";
 
+// define database schema
 const doctorSchema = new mongoose.Schema({
   username: {
     type: String,
@@ -19,6 +20,7 @@ const doctorSchema = new mongoose.Schema({
     type: String, 
     required: true
   },
+  // list of patients that is managed by a doctor
   patients: [
     {
       type: mongoose.Schema.Types.ObjectId,

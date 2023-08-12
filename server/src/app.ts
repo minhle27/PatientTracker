@@ -5,8 +5,9 @@ import mongoose from "mongoose";
 const app = express();
 app.use(express.json());
 import diagnosesRouter from "./routes/diagnoses";
-import patientsRouter from "./routes/patients";
+//import patientsRouter from "./routes/patients";
 import doctorsRouter from "./routes/doctors";
+import authRouter from "./routes2/auth";
 
 mongoose.set("strictQuery", false);
 
@@ -28,8 +29,9 @@ app.get("/api/ping", (_req, res) => {
   res.send("pong");
 });
 
+app.use("/api/auth", authRouter);
 app.use("/api/diagnoses", diagnosesRouter);
-app.use("/api/patients", patientsRouter);
+//app.use("/api/patients", patientsRouter);
 app.use("/api/doctors", doctorsRouter);
 
 export default app;

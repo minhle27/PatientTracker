@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
-import { Gender } from "../types";
+
 import uniqueValidator from "mongoose-unique-validator";
+import { InferSchemaType } from "mongoose";
 
 const patientSchema = new mongoose.Schema({
   username: {
@@ -15,6 +16,7 @@ const patientSchema = new mongoose.Schema({
     required: [true, "Required"],
     minlength: [8, "Must be 8 characters at least"],
   },
+  // id of doctor that manages this patient
   doctorId: {
     type: String,
   },
@@ -31,12 +33,16 @@ const patientSchema = new mongoose.Schema({
     required: [true, "Required"],
   },
   gender: {
-    type: Gender,
+    type: String,
     required: [true, "Required"],
   },
   occupation: {
     type: String,
     required: [true, "Required"],
+  },
+  email: {
+    type: String,
+    required: [true, "Required"]
   },
   entries: [
     {
@@ -46,10 +52,11 @@ const patientSchema = new mongoose.Schema({
   ],
 });
 
+type patientSchemaInferType = InferSchemaType<typeof patientSchema>;
 patientSchema.plugin(uniqueValidator, {
   message: "Error, expected {PATH} to be unique",
 });
 
-const patientModel = mongoose.model("Patient", patientSchema);
+const patientModel = mongoose.model<patientSchemaInferType>("Patient", patientSchema);
 
 export default patientModel;
