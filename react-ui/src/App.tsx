@@ -4,34 +4,34 @@ import { Button, Divider, Container, Typography } from '@mui/material';
 
 import { Diagnosis } from "./types";
 import { pingBackend } from './utils';
-import { useStateValue } from "./state";
-import { setPatientList } from "./state";
 
-import patientService from "./services/patients";
+import { useAppSelector } from './redux/hook';
+import { Navigate } from "react-router-dom";
+
 import diagnosisService from "./services/diagnosis";
-import PatientListPage from "./scenes/PatientListPage";
-import PatientInfoPage from "./scenes/PatientInfoPage";
+import PatientListPage from "./components/PatientListPage";
+import PatientInfoPage from "./components/PatientInfoPage";
+import SignInForm from "./components/SignIn";
 
 const App = () => {
   const [diagnoses, setDiagnoses] = useState<Diagnosis[]>([]);
-  const [, dispatch] = useStateValue();
+  const isAuth = Boolean(useAppSelector((state) => state.auth.token));
 
   useEffect(() => {
     pingBackend();
 
     const fetchInitialData = async () => {
       try {
-        const patientListFromApi = await patientService.getAll();
+        // const patientListFromApi = await patientService.getAll();
         const diagnoses = await diagnosisService.getAll();
         setDiagnoses(diagnoses);
-        dispatch(setPatientList(patientListFromApi));
       } catch (e) {
         console.log(e);
       }
     };
     
     void fetchInitialData();
-  }, [dispatch]);
+  }, []);
 
   return (
     <div className="App">
@@ -44,8 +44,10 @@ const App = () => {
         </Button>
         <Divider hidden />
         <Routes>
+          <Route path="/" element={<SignInForm />} />
           <Route path="/patients/:id" element={<PatientInfoPage diagnoses={diagnoses} />} />
-          <Route path="/" element={<PatientListPage />} />
+          <Route path="/home" element={isAuth ? <PatientListPage /> : <Navigate to="/" />} />
+          <Route path="/sign-in" element={<SignInForm />}/>
         </Routes>
       </Container>
     </div>

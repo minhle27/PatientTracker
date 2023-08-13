@@ -1,12 +1,15 @@
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter as Router } from "react-router-dom";
 import App from './App'
-import { reducer, StateProvider } from './state';
+import { Provider } from 'react-redux';
+import store from './redux/store';
+import 'tailwindcss/tailwind.css';
+
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <Router>
-    <StateProvider reducer={reducer}>
+    <Provider store={store}>
       <App />
-    </StateProvider>
+    </Provider>
   </Router>
 )

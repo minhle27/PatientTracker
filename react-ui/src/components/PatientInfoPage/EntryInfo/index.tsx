@@ -1,5 +1,5 @@
 import { Entry, Diagnosis } from "../../../types";
-import EntryDetails from "../EntryDetail/EntryDetails";
+import EntryDetails from "../EntryDetail";
 import './EntryInfo.css'
 import { Work, MedicalServices, LocalHospital } from '@mui/icons-material';
 
